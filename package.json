@@ -1,0 +1,28 @@
+{
+  "name": "tabtwo",
+  "version": "0.0.0",
+  "description": "Tab completion for multiplatform shells",
+  "author": "",
+  "license": "MIT",
+  "keywords": [
+    "terminal",
+    "tab",
+    "console",
+    "complete",
+    "completion",
+    "multiplatform",
+    "cmd",
+    "bash",
+    "fish",
+    "zsh",
+    "powershell"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "index.js",
+  "bin": {
+    "tabtwo-test": "./test.js"
+  }
+}
