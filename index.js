@@ -80,6 +80,8 @@ export class TabTwo {
               str = `${name.replace(/:/g, '\\:')}:${description}`
             } else if (shell.type === 'fish' && description) {
               str = `${name}\t${description}`
+            } else if (shell.type === 'powershell' && description) {
+              str = `${name}\t${description}`
             }
         
             return str

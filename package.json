@@ -19,10 +19,23 @@
   ],
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --trace-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "main": "index.js",
   "bin": {
-    "tabtwo-test": "./test.js"
+    "tabtwo-test": "test/completionTestScript.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "shelljs": "^0.8.5"
+  },
+  "jest": {
+    "transform": {},
+    "resetMocks": true,
+    "resetModules": true,
+    "reporters": [
+      "default",
+      "github-actions"
+    ]
   }
 }
