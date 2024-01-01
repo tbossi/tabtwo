@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'node:url'
 import * as path from 'node:path'
+import * as fs from 'node:fs/promises'
+import * as crypto from 'node:crypto'
 import shelljs from 'shelljs'
 
 const projectDir = path.join(fileURLToPath(import.meta.url), '../..')
@@ -29,7 +31,11 @@ const platformInfo = {
     shell: process.env.TEST_SHELL,
 }
 
+const logRegexBashInstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion.sh" \(.*\)\nInstalled!/s
+const logRegexBashUninstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion.sh" \(.*\)\nUninstalled!/s
+
 describe('Acceptance test', () => {
+    let shellProfileFile, shellProfileHashBefore
 
     beforeAll(() => {
         /* TODO:
@@ -44,20 +50,25 @@ describe('Acceptance test', () => {
         console.log('Install test command done')
 
         if (platformInfo.shell === 'bash') {
-            expect(result.stdout).toMatch(/Edited files:\n- \/.*\/\.bashrc\n- \/.*\/tabtwo-test_completion.sh\nInstalled!/s)
+            expect(result.stdout).toMatch(logRegexBashInstall)
+            const match = logRegexBashInstall.exec(result.stdout)
+            shellProfileFile = match[1]
+            shellProfileHashBefore = match[2]
         }
     })
 
-    afterAll(() => {
+    afterAll(async () => {
         shelljs.cd(projectDir)
         const result = exec('tabtwo-test uninstall')
         console.log('Uninstall test command done')
 
-        //TODO: also check shell profile is correctly reverted
-
         if (platformInfo.shell === 'bash') {
-            expect(result.stdout).toMatch(/Edited files:\n- \/.*\/\.bashrc\n- \/.*\/tabtwo-test_completion.sh\nUninstalled!/s)
+            expect(result.stdout).toMatch(logRegexBashUninstall)
         }
+
+        const shellProfileContent = await fs.readFile(shellProfileFile, 'utf-8')
+        const actualHash = crypto.createHash('sha256').update(shellProfileContent).digest('hex')
+        expect(actualHash).toStrictEqual(shellProfileHashBefore)
 
         exec('npm uninstall -g')
     })
@@ -76,22 +87,23 @@ describe('Acceptance test', () => {
                 '--- BEGIN COMPLETION ---',
                 '==> RESULT:',
                 '',
-                'argv_0___.*\/node',
-                'argv_1___.*\/tabtwo-test',
-                'argv_2___--shell-complete',
-                'argv_3___--',
-                'argv_4___tabtwo-test',
-                'argv_5___something',
-                'argv_6___part',
-                'info_complete___true',
-                'info_last___part',
-                'info_lastPartial___part',
-                'info_line___tabtwo-test something part',
-                'info_partial___tabtwo-test something part',
-                'info_point___26',
-                'info_prev___something',
-                'info_words___2',
-                'opt1',
+                'argv_0___.*\/node\r',
+                'argv_1___.*\/tabtwo-test\r',
+                'argv_2___--shell-complete\r',
+                'argv_3___--\r',
+                'argv_4___tabtwo-test\r',
+                'argv_5___something\r',
+                'argv_6___part\r',
+                'info_complete___true\r',
+                'info_last___part\r',
+                'info_lastPartial___part\r',
+                'info_line___tabtwo-test something part\r',
+                'info_partial___tabtwo-test something part\r',
+                'info_point___26\r',
+                'info_prev___something\r',
+                'info_words___2\r',
+                'opt1\r',
+                'opt2',
                 '--- END COMPLETION ---',
             ].join('\n'), 's')
 

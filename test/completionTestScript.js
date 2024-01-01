@@ -2,11 +2,25 @@
 import { TabTwo } from "../index.js"
 import { setTimeout } from "node:timers/promises"
 import { fileURLToPath } from 'node:url'
+import * as fs from 'node:fs/promises'
+import * as crypto from 'node:crypto'
 
-// TODO: backup file to assert equality after uninstall (or maybe print hash and just check that?)
 const dummyConfirmation = async (files) => {
+    // Compute hash before edit to assert file equality after uninstall
+    files = await Promise.all(files.map(async file => {
+        try {
+            const fileContent = await fs.readFile(file, 'utf-8')
+            return {
+                hash: crypto.createHash('sha256').update(fileContent).digest('hex'),
+                file: file
+            }
+        } catch (e) {
+            return {hash: '-', file: file}
+        }
+    }))
+
     // Log file to assert in tests
-    console.log(`Edited files:\n${files.map(f => `- ${f}`).join('\n')}`)
+    console.log(`Edited files:\n${files.map(f => `- "${f.file}" (${f.hash})`).join('\n')}`)
     return true
 }
 

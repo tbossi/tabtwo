@@ -238,7 +238,7 @@ export const completions = {
     // TODO: elvish, xonsh, nushell?
 }
 
-export const installBlockCheckRegex = (program) => new RegExp(`${codeBegin(program)}\n.*?\n${codeEnd(program)}`, 'gs')
+export const installBlockCheckRegex = (program) => new RegExp(`\n${codeBegin(program)}\n.*?\n${codeEnd(program)}\n`, 'gs')
 
 export const getCompletionInfo = (env) => {
     let cword = Number(env.COMP_CWORD)
