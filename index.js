@@ -22,7 +22,7 @@ export class TabTwo {
 
     getCompletionFilename(shell) {
         const scriptExtension = shell.type === 'powershell' ? 'ps1' : (shell.type === 'cmd' ? 'cmd' : 'sh')
-        return path.join(this.programCompletionFolder, `${this.programName}_completion.${scriptExtension}`)
+        return path.join(this.programCompletionFolder, `${this.programName}_completion_for_${shell.type}.${scriptExtension}`)
     }
 
     async install(env, askConfirmation) {

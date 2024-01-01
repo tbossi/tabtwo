@@ -34,18 +34,18 @@ export function detectShell(env) {
         configFile = 'AutoRun.cmd'
     } else if (detection.includes('powershell') || detection.includes('pwsh')) {
         shellType = 'powershell'
-        configFile = os.platform() === 'win32'
+        configFile = env.PROFILE || (os.platform() === 'win32'
             ? 'Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1'
-            : '.config/powershell/Microsoft.PowerShell_profile.ps1'
+            : '.config/powershell/Microsoft.PowerShell_profile.ps1')
     } else if (detection.includes('bash')) {
         shellType = 'bash'
-        configFile = os.platform() === 'darwin' ? '.bash_profile' : '.bashrc'
+        configFile = env.BASH_ENV || (os.platform() === 'darwin' ? '.bash_profile' : '.bashrc')
     } else if (detection.includes('zsh')) {
         shellType = 'zsh'
-        configFile = '.zshrc'
+        configFile = path.join(env.ZDOTDIR || '', '.zshrc')
     } else if (detection.includes('fish')) {
         shellType = 'fish'
-        configFile = '.config/fish/config.fish'
+        configFile = path.join(env.XDG_CONFIG_HOME || '.config', 'fish', 'config.fish')
     } else if (detection.includes('ksh')) {
         shellType = 'ksh'
         configFile = '.kshrc'
@@ -63,6 +63,6 @@ export function detectShell(env) {
     return {
         executable: shellExecutable,
         type: shellType || null,
-        configFile: configFile ? path.join(env.HOME || env.USERPROFILE, configFile) : null,
+        configFile: configFile ? path.resolve(env.HOME || env.USERPROFILE, configFile) : null,
     }
 }

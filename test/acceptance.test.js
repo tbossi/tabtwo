@@ -14,6 +14,9 @@ const exec = (str) => {
         error.stderr = result.stderr
         error.stdout = result.stdout
         error.code = result.code
+
+        console.error(error.stderr)
+        
         throw error
     }
     return {
@@ -31,8 +34,8 @@ const platformInfo = {
     shell: process.env.TEST_SHELL,
 }
 
-const logRegexBashInstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion.sh" \(.*\)\nInstalled!/s
-const logRegexBashUninstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion.sh" \(.*\)\nUninstalled!/s
+const logRegexBashInstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nInstalled!/s
+const logRegexBashUninstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nUninstalled!/s
 
 describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
