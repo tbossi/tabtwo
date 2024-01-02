@@ -37,6 +37,9 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node_version }}-npm-${{ hashFiles('package.json') }}
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
+      - name: Install expect
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: sudo apt-get install -y expect
       - name: Install fish
         if: ${{ matrix.shell == 'fish'}}
         uses: fish-actions/install-fish@v1
@@ -52,6 +55,7 @@ jobs:
         shell: zsh {0}
         run: |
           export SHELL='/bin/zsh'
+          touch ~/.zshrc
           npm install
           npm run test
       - name: Install and test (fish)
@@ -59,6 +63,7 @@ jobs:
         shell: fish {0}
         run: |
           export SHELL='/bin/fish'
+          touch ~/.config/fish/config.fish
           npm install
           npm run test
       - name: Install and test (ksh)
@@ -66,6 +71,7 @@ jobs:
         shell: ksh {0}
         run: |
           export SHELL='/bin/ksh'
+          touch ~/.kshrc
           npm install
           npm run test
       - name: Install and test (powershell)
