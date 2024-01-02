@@ -36,6 +36,12 @@ const platformInfo = {
 
 const logRegexBashInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nInstalled!/s
 const logRegexBashUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nUninstalled!/s
+const logRegexZshInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_zsh.sh" \(.*\)\nInstalled!/s
+const logRegexZshUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_zsh.sh" \(.*\)\nUninstalled!/s
+const logRegexKshInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_ksh.sh" \(.*\)\nInstalled!/s
+const logRegexKshUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_ksh.sh" \(.*\)\nUninstalled!/s
+const logRegexFishInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_fish.sh" \(.*\)\nInstalled!/s
+const logRegexFishUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_fish.sh" \(.*\)\nUninstalled!/s
 
 describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
@@ -72,6 +78,21 @@ describe('Acceptance test', () => {
             const match = logRegexBashInstall.exec(result.stdout)
             shellProfileFile = match[1]
             shellProfileHashBefore = match[2]
+        } else if (platformInfo.shell === 'zsh') {
+            expect(result.stdout).toMatch(logRegexZshInstall)
+            const match = logRegexZshInstall.exec(result.stdout)
+            shellProfileFile = match[1]
+            shellProfileHashBefore = match[2]
+        } else if (platformInfo.shell === 'ksh') {
+            expect(result.stdout).toMatch(logRegexKshInstall)
+            const match = logRegexKshInstall.exec(result.stdout)
+            shellProfileFile = match[1]
+            shellProfileHashBefore = match[2]
+        } else if (platformInfo.shell === 'fish') {
+            expect(result.stdout).toMatch(logRegexFishInstall)
+            const match = logRegexFishInstall.exec(result.stdout)
+            shellProfileFile = match[1]
+            shellProfileHashBefore = match[2]
         }
     })
 
@@ -82,6 +103,12 @@ describe('Acceptance test', () => {
 
         if (platformInfo.shell === 'bash') {
             expect(result.stdout).toMatch(logRegexBashUninstall)
+        } else if (platformInfo.shell === 'ksh') {
+            expect(result.stdout).toMatch(logRegexKshUninstall)
+        } else if (platformInfo.shell === 'zsh') {
+            expect(result.stdout).toMatch(logRegexZshUninstall)
+        } else if (platformInfo.shell === 'fish') {
+            expect(result.stdout).toMatch(logRegexFishUninstall)
         }
 
         const shellProfileContent = await fs.readFile(shellProfileFile, 'utf-8')

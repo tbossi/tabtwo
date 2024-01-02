@@ -85,14 +85,14 @@ jobs:
         if: ${{ matrix.shell == 'powershell' && matrix.os != 'windows-latest'}}
         shell: pwsh
         run: |
-          $env:ComSpec = Get-Command -Name pwsh
+          $env:SHELL = '/usr/bin/pwsh'
           npm install
           npm run test
       - name: Install and test (powershell windows)
         if: ${{ matrix.shell == 'powershell' && matrix.os == 'windows-latest'}}
         shell: pwsh
         run: |
-          $env:ComSpec = Get-Command -Name pwsh
+          $env:ComSpec = 'C:\Program Files\PowerShell\7\pwsh.EXE'
           npm install
           npm run test
 
