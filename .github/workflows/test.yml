@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node_version: [20] # [16, 18, 19, 20, 21]
-        shell: [bash, zsh, fish, ksh, pwsh]
+        shell: [bash, zsh, fish, ksh, powershell]
         exclude:
           - os: windows-latest
             shell: [bash, zsh, fish, ksh]
@@ -36,9 +36,12 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node_version }}-npm-${{ hashFiles('package.json') }}
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
+      - name: Install fish
+        if: ${{ matrix.shell == 'fish'}}
+        uses: fish-actions/install-fish
       - name: Install and test (bash)
         if: ${{ matrix.shell == 'bash'}}
-        shell: bash
+        shell: bash -e {0}
         run: |
           npm install
           npm run test

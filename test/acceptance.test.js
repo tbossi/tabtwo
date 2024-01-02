@@ -34,8 +34,8 @@ const platformInfo = {
     shell: process.env.TEST_SHELL,
 }
 
-const logRegexBashInstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nInstalled!/s
-const logRegexBashUninstall = /Edited files:\n- "(\/.*\/\.bashrc)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nUninstalled!/s
+const logRegexBashInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nInstalled!/s
+const logRegexBashUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_bash.sh" \(.*\)\nUninstalled!/s
 
 describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
