@@ -45,6 +45,29 @@ const logRegexFishUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabt
 const logRegexPowershellInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nInstalled!/s
 const logRegexPowershellUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nUninstalled!/s
 
+const expectedCompletion = new RegExp([
+    '--- BEGIN COMPLETION ---',
+    '==> RESULT:',
+    'argv_0___.*\/node',
+    'argv_1___.*\/tabtwo-test',
+    'argv_2___--shell-complete',
+    'argv_3___--',
+    'argv_4___tabtwo-test',
+    'argv_5___something',
+    'argv_6___part',
+    'info0_complete___true',
+    'info1_words___2',
+    'info2_point___26',
+    'info3_line___tabtwo-test something part',
+    'info4_partial___tabtwo-test something part',
+    'info5_last___part',
+    'info6_lastPartial___part',
+    'info7_prev___something',
+    'opt1',
+    'opt2',
+    '--- END COMPLETION ---',
+].join('(\r\n|\r|\n)+'), 's')
+
 describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
 
@@ -137,32 +160,34 @@ describe('Acceptance test', () => {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
             const result = exec(`expect ${shellExpectFile} "bash -i" "tabtwo-test something part"`)
 
-            const expected = new RegExp([
-                '--- BEGIN COMPLETION ---',
-                '==> RESULT:',
-                'argv_0___.*\/node',
-                'argv_1___.*\/tabtwo-test',
-                'argv_2___--shell-complete',
-                'argv_3___--',
-                'argv_4___tabtwo-test',
-                'argv_5___something',
-                'argv_6___part',
-                'info0_complete___true',
-                'info1_words___2',
-                'info2_point___26',
-                'info3_line___tabtwo-test something part',
-                'info4_partial___tabtwo-test something part',
-                'info5_last___part',
-                'info6_lastPartial___part',
-                'info7_prev___something',
-                'opt1',
-                'opt2',
-                '--- END COMPLETION ---',
-            ].join('(\r\n|\r|\n)+'), 's')
+            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stderr).toStrictEqual('')
+        })
+    }
 
-            console.log(JSON.stringify(result.stdout))
+    if (platformInfo.shell === 'fish') {
+        test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
+            const result = exec(`expect ${shellExpectFile} "fish -i" "tabtwo-test something part"`)
 
-            expect(result.stdout).toMatch(expected)
+            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stderr).toStrictEqual('')
+        })
+    }
+
+    if (platformInfo.shell === 'zsh') {
+        test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
+            const result = exec(`expect ${shellExpectFile} "zsh -i" "tabtwo-test something part"`)
+
+            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stderr).toStrictEqual('')
+        })
+    }
+
+    if (platformInfo.shell === 'ksh') {
+        test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
+            const result = exec(`expect ${shellExpectFile} "ksh" "tabtwo-test something part"`)
+
+            expect(result.stdout).toMatch(expectedCompletion)
             expect(result.stderr).toStrictEqual('')
         })
     }
