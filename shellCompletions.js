@@ -232,8 +232,11 @@ export const completions = {
     tcsh: (_program, _scriptPath, _completer) => {
         throw new Error('not supported')
     },
+    sh: (_program, _scriptPath, _completer) => {
+        throw new Error('not supported')
+    },
     cmd: (_program, _scriptPath, _completer) => {
-        throw new Error('cmd does not support tab completion')
+        throw new Error('not supported')
     },
     // TODO: elvish, xonsh, nushell?
 }
