@@ -24,8 +24,7 @@ const exec = (str) => {
         stderr: result.stderr,
     }
 }
-process.env.TEST_SHELL = 'bash'
-process.env.TEST_OS = 'linux'
+
 /*
  * This variables should be set before running the test by the running shell itself.
  * In this way we avoid relying on some logic to detect the actual platform and we ensure these are the correct values.
