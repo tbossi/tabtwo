@@ -24,7 +24,8 @@ const exec = (str) => {
         stderr: result.stderr,
     }
 }
-
+process.env.TEST_SHELL = 'bash'
+process.env.TEST_OS = 'linux'
 /*
  * This variables should be set before running the test by the running shell itself.
  * In this way we avoid relying on some logic to detect the actual platform and we ensure these are the correct values.
@@ -104,26 +105,25 @@ describe('Acceptance test', () => {
             const expected = new RegExp([
                 '--- BEGIN COMPLETION ---',
                 '==> RESULT:',
-                '',
-                'argv_0___.*\/node\r',
-                'argv_1___.*\/tabtwo-test\r',
-                'argv_2___--shell-complete\r',
-                'argv_3___--\r',
-                'argv_4___tabtwo-test\r',
-                'argv_5___something\r',
-                'argv_6___part\r',
-                'info_complete___true\r',
-                'info_last___part\r',
-                'info_lastPartial___part\r',
-                'info_line___tabtwo-test something part\r',
-                'info_partial___tabtwo-test something part\r',
-                'info_point___26\r',
-                'info_prev___something\r',
-                'info_words___2\r',
-                'opt1\r',
+                'argv_0___.*\/node',
+                'argv_1___.*\/tabtwo-test',
+                'argv_2___--shell-complete',
+                'argv_3___--',
+                'argv_4___tabtwo-test',
+                'argv_5___something',
+                'argv_6___part',
+                'info_complete___true',
+                'info_last___part',
+                'info_lastPartial___part',
+                'info_line___tabtwo-test something part',
+                'info_partial___tabtwo-test something part',
+                'info_point___26',
+                'info_prev___something',
+                'info_words___2',
+                'opt1',
                 'opt2',
                 '--- END COMPLETION ---',
-            ].join('\n'), 's')
+            ].join('[\r\n]+'), 's')
 
             expect(result.stdout).toMatch(expected)
             expect(result.stderr).toStrictEqual('')
