@@ -44,24 +44,28 @@ jobs:
         if: ${{ matrix.shell == 'bash'}}
         shell: bash -e {0}
         run: |
+          export SHELL='/bin/bash'
           npm install
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
         shell: zsh {0}
         run: |
+          export SHELL='/bin/zsh'
           npm install
           npm run test
       - name: Install and test (fish)
         if: ${{ matrix.shell == 'fish'}}
         shell: fish {0}
         run: |
+          export SHELL='/bin/fish'
           npm install
           npm run test
       - name: Install and test (ksh)
         if: ${{ matrix.shell == 'ksh'}}
         shell: ksh {0}
         run: |
+          export SHELL='/bin/ksh'
           npm install
           npm run test
       - name: Install and test (powershell)
