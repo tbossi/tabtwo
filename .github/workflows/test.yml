@@ -18,7 +18,13 @@ jobs:
         shell: [bash, zsh, fish, ksh, powershell]
         exclude:
           - os: windows-latest
-            shell: [bash, zsh, fish, ksh]
+            shell: bash
+          - os: windows-latest
+            shell: zsh
+          - os: windows-latest
+            shell: fish
+          - os: windows-latest
+            shell: ksh
       
     env:
       OS: ${{ matrix.os }}
@@ -47,14 +53,14 @@ jobs:
         if: ${{ matrix.shell == 'bash'}}
         shell: bash -e {0}
         run: |
-          export SHELL='/bin/bash'
+          export SHELL=$(which bash)
           npm install
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
         shell: zsh {0}
         run: |
-          export SHELL='/bin/zsh'
+          export SHELL=$(which zsh)
           touch ~/.zshrc
           npm install
           npm run test
@@ -62,7 +68,8 @@ jobs:
         if: ${{ matrix.shell == 'fish'}}
         shell: fish {0}
         run: |
-          export SHELL='/bin/fish'
+          export SHELL=$(which fish)
+          mkdir -p ~/.config/fish 
           touch ~/.config/fish/config.fish
           npm install
           npm run test
@@ -70,14 +77,22 @@ jobs:
         if: ${{ matrix.shell == 'ksh'}}
         shell: ksh {0}
         run: |
-          export SHELL='/bin/ksh'
+          export SHELL=$(which ksh)
           touch ~/.kshrc
           npm install
           npm run test
-      - name: Install and test (powershell)
-        if: ${{ matrix.shell == 'powershell'}}
+      - name: Install and test (powershell linux/macos)
+        if: ${{ matrix.shell == 'powershell' && matrix.os != 'windows-latest'}}
         shell: pwsh
         run: |
+          $env:ComSpec = Get-Command -Name pwsh
+          npm install
+          npm run test
+      - name: Install and test (powershell windows)
+        if: ${{ matrix.shell == 'powershell' && matrix.os == 'windows-latest'}}
+        shell: pwsh
+        run: |
+          $env:ComSpec = Get-Command -Name pwsh
           npm install
           npm run test
 

@@ -122,7 +122,7 @@ describe('Acceptance test', () => {
                 'opt1',
                 'opt2',
                 '--- END COMPLETION ---',
-            ].join('[\r\n]+'), 's')
+            ].join('(\r\n|\r|\n)+'), 's')
 
             expect(result.stdout).toMatch(expected)
             expect(result.stderr).toStrictEqual('')
