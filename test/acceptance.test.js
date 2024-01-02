@@ -41,6 +41,12 @@ describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
 
     beforeAll(() => {
+        if (!platformInfo.shell) {
+            throw new Error('Cannot run if TEST_SHELL is not set')
+        }
+        if (!platformInfo.os) {
+            throw new Error('Cannot run if TEST_OS is not set')
+        }
         /* TODO:
             1. On Linux/maxOS check expect is installed (/usr/bin/expect) (https://phoenixnap.com/kb/linux-expect)
             2. On windows install Pester?
