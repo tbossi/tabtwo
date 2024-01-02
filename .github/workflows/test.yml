@@ -38,7 +38,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
       - name: Install fish
         if: ${{ matrix.shell == 'fish'}}
-        uses: fish-actions/install-fish
+        uses: fish-actions/install-fish@v1
       - name: Install and test (bash)
         if: ${{ matrix.shell == 'bash'}}
         shell: bash -e {0}
