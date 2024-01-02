@@ -38,8 +38,7 @@ try {
         if (process.argv[2] === '--shell-complete') {
             await tt.handleCompletion(process.env, async (info) => {
                 let optList = process.argv.map((arg, index) => `argv_${index}___${arg}`)
-                optList = optList.concat(Object.entries(info).map(([k, v]) => `info_${k}___${v}`))
-                optList.sort((a, b) => a.localeCompare(b))
+                optList = optList.concat(Object.entries(info).map(([k, v], index) => `info${index}_${k}___${v}`))
                 
                 optList = optList.map(v => ({name: v}))
                 optList.push({name: 'opt1', description: 'desc1'})
