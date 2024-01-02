@@ -42,6 +42,8 @@ const logRegexKshInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-
 const logRegexKshUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_ksh.sh" \(.*\)\nUninstalled!/s
 const logRegexFishInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_fish.sh" \(.*\)\nInstalled!/s
 const logRegexFishUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_fish.sh" \(.*\)\nUninstalled!/s
+const logRegexPowershellInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nInstalled!/s
+const logRegexPowershellUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nUninstalled!/s
 
 describe('Acceptance test', () => {
     let shellProfileFile, shellProfileHashBefore
@@ -93,6 +95,11 @@ describe('Acceptance test', () => {
             const match = logRegexFishInstall.exec(result.stdout)
             shellProfileFile = match[1]
             shellProfileHashBefore = match[2]
+        } else if (platformInfo.shell === 'powershell') {
+            expect(result.stdout).toMatch(logRegexPowershellInstall)
+            const match = logRegexPowershellInstall.exec(result.stdout)
+            shellProfileFile = match[1]
+            shellProfileHashBefore = match[2]
         }
     })
 
@@ -109,6 +116,8 @@ describe('Acceptance test', () => {
             expect(result.stdout).toMatch(logRegexZshUninstall)
         } else if (platformInfo.shell === 'fish') {
             expect(result.stdout).toMatch(logRegexFishUninstall)
+        } else if (platformInfo.shell === 'powershell') {
+            expect(result.stdout).toMatch(logRegexPowershellUninstall)
         }
 
         const shellProfileContent = await fs.readFile(shellProfileFile, 'utf-8')
@@ -150,6 +159,8 @@ describe('Acceptance test', () => {
                 'opt2',
                 '--- END COMPLETION ---',
             ].join('(\r\n|\r|\n)+'), 's')
+
+            console.log(JSON.stringify(result.stdout))
 
             expect(result.stdout).toMatch(expected)
             expect(result.stderr).toStrictEqual('')
