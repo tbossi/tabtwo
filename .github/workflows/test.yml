@@ -46,6 +46,12 @@ jobs:
       - name: Install expect
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: sudo apt-get install -y expect
+      - name: Install zsh
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.shell == 'zsh' }}
+        run: sudo apt-get install -y zsh
+      - name: Install ksh
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.shell == 'ksh' }}
+        run: sudo apt-get install -y ksh
       - name: Install fish
         if: ${{ matrix.shell == 'fish'}}
         uses: fish-actions/install-fish@v1
@@ -94,5 +100,3 @@ jobs:
         run: |
           npm install
           npm run test
-
-
