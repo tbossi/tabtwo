@@ -15,9 +15,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node_version: [16, 18, 19, 20, 21]
         shell: [bash, zsh, fish, ksh, powershell]
-    exclude:
-      - os: windows-latest
-        shell: [bash, zsh, fish, ksh]
+        exclude:
+          - os: windows-latest
+            shell: [bash, zsh, fish, ksh]
       
     env:
       OS: ${{ matrix.os }}
