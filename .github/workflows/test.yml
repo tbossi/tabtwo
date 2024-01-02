@@ -1,0 +1,44 @@
+name: Test TabTwo
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'feature/*'
+  
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node_version: [16, 18, 19, 20, 21]
+        shell: [bash, zsh, fish, ksh, powershell]
+    exclude:
+      - os: windows-latest
+        shell: [bash, zsh, fish, ksh]
+      
+    env:
+      OS: ${{ matrix.os }}
+      NODEJS: ${{ matrix.node_version }}
+      TEST_OS: ${{ matrix.os == 'windows-latest' && 'win32' || matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'macos-latest' && 'darwin' }}
+      TEST_SHELL: ${{ matrix.shell }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Cache NPM packages
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ matrix.node_version }}-npm-${{ hashFiles('package.json') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npm run test
+
+
