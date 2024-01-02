@@ -48,14 +48,14 @@ describe('Acceptance test', () => {
             throw new Error('Cannot run if TEST_OS is not set')
         }
         console.log(`Test will run for ${platformInfo.shell} on ${platformInfo.os}`)
-        console.log(`ComSpec: ${env.ComSpec}`)
-        console.log(`SHELL: ${env.SHELL}`)
-        console.log(`HOME: ${env.HOME}`)
-        console.log(`USERPROFILE: ${env.USERPROFILE}`)
-        console.log(`BASH_ENV: ${env.BASH_ENV}`)
-        console.log(`PROFILE: ${env.PROFILE}`)
-        console.log(`ZDOTDIR: ${env.ZDOTDIR}`)
-        console.log(`XDG_CONFIG_HOME: ${env.XDG_CONFIG_HOME}`)
+        console.log(`ComSpec: ${process.env.ComSpec}`)
+        console.log(`SHELL: ${process.env.SHELL}`)
+        console.log(`HOME: ${process.env.HOME}`)
+        console.log(`USERPROFILE: ${process.env.USERPROFILE}`)
+        console.log(`BASH_ENV: ${process.env.BASH_ENV}`)
+        console.log(`PROFILE: ${process.env.PROFILE}`)
+        console.log(`ZDOTDIR: ${process.env.ZDOTDIR}`)
+        console.log(`XDG_CONFIG_HOME: ${process.env.XDG_CONFIG_HOME}`)
         /* TODO:
             1. On Linux/maxOS check expect is installed (/usr/bin/expect) (https://phoenixnap.com/kb/linux-expect)
             2. On windows install Pester?
