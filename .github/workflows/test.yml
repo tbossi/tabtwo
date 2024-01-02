@@ -23,7 +23,7 @@ jobs:
       OS: ${{ matrix.os }}
       NODEJS: ${{ matrix.node_version }}
       TEST_OS: ${{ matrix.os == 'windows-latest' && 'win32' || matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'macos-latest' && 'darwin' }}
-      TEST_SHELL: ${{ matrix.shell == 'pwsh' && 'powershell' || matrix.shell }}
+      TEST_SHELL: ${{ matrix.shell }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -36,8 +36,33 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node_version }}-npm-${{ hashFiles('package.json') }}
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
-      - name: Install
-        shell: ${{ matrix.shell }}
+      - name: Install and test (bash)
+        if: ${{ matrix.shell == 'bash'}}
+        shell: bash
+        run: |
+          npm install
+          npm run test
+      - name: Install and test (zsh)
+        if: ${{ matrix.shell == 'zsh'}}
+        shell: zsh {0}
+        run: |
+          npm install
+          npm run test
+      - name: Install and test (fish)
+        if: ${{ matrix.shell == 'fish'}}
+        shell: fish {0}
+        run: |
+          npm install
+          npm run test
+      - name: Install and test (ksh)
+        if: ${{ matrix.shell == 'ksh'}}
+        shell: ksh {0}
+        run: |
+          npm install
+          npm run test
+      - name: Install and test (powershell)
+        if: ${{ matrix.shell == 'powershell'}}
+        shell: pwsh
         run: |
           npm install
           npm run test
