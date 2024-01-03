@@ -187,4 +187,10 @@ describe('Acceptance test', () => {
             expect(result.stderr).toStrictEqual('')
         })
     }
+
+    if (platformInfo.shell === 'powershell') {
+        test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
+            throw new Error('TODO')
+        })
+    }
 })

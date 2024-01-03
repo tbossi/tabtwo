@@ -26,6 +26,7 @@ expect $prompt
 puts "--- BEGIN COMPLETION ---"
 
 log_user 0
+exp_internal 1
 send "${command_to_test}\t"
 expect {
     -timeout 3

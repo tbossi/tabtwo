@@ -15,7 +15,8 @@ expect $prompt
 # Run test completion
 puts "--- BEGIN COMPLETION ---"
 
-log_user 1
+log_user 0
+exp_internal 1
 send "${command_to_test}\t\t\t"
 expect {
     -timeout 3
