@@ -9,18 +9,18 @@ set command_to_test [lindex $argv 0]
 spawn zsh -i
 send "setopt no_hist_verify\n"
 expect $prompt
-send "export PS1='$prompt'\n"
+send "export PROMPT='$prompt'\n"
 expect $prompt
 send "autoload -U compinit\n"
 expect $prompt
-send "compinit\n"
+send "compinit -u\n"
 expect $prompt
 
 # Run test completion
 puts "--- BEGIN COMPLETION ---"
 
 log_user 1
-send "${command_to_test}\t"
+send "${command_to_test}\t\t"
 expect {
     -timeout 3
     -re "${command_to_test}\r\n(.*)\r\n$prompt${command_to_test}" {
