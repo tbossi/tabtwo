@@ -1,0 +1,44 @@
+#!/usr/bin/env expect
+
+log_user 1
+
+set prompt {/@}
+set command_to_test [lindex $argv 0]
+
+# Spawn shell and prepare for consistent output
+spawn env INPUTRC=/dev/null zsh -i
+send "set +o history\n"
+expect $prompt
+send "export PS1='$prompt'\n"
+expect $prompt
+send "bind 'set show-all-if-ambiguous on'\n"
+expect $prompt
+send "bind 'set bell-style none'\n"
+expect $prompt
+send "bind 'set completion-query-items -1'\n"
+expect $prompt
+send "bind 'set page-completions off'\n"
+expect $prompt
+send "bind 'set completion-display-width 0'\n"
+expect $prompt
+
+# Run test completion
+puts "--- BEGIN COMPLETION ---"
+
+log_user 1
+send "${command_to_test}\t"
+expect {
+    -timeout 3
+    -re "${command_to_test}\r\n(.*)\r\n$prompt${command_to_test}" {
+        set captured_output $expect_out(1,string)
+        puts "==> RESULT:\n\n$captured_output"
+    }
+    timeout {
+        puts "==> TIMEOUT"
+    }
+}
+
+puts "--- END COMPLETION ---"
+
+send "exit\n"
+expect eof

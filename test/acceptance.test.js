@@ -5,7 +5,7 @@ import * as crypto from 'node:crypto'
 import shelljs from 'shelljs'
 
 const projectDir = path.join(fileURLToPath(import.meta.url), '../..')
-const shellExpectFile = path.join(projectDir, 'test', 'acceptance-script', 'acceptance.exp')
+const shellExpectFile = (name) => path.join(projectDir, 'test', 'acceptance-script', `acceptance_${name}.exp`)
 
 const exec = (str) => {
     let result = shelljs.exec(str)
@@ -87,10 +87,6 @@ describe('Acceptance test', () => {
         console.log(`PROFILE: ${process.env.PROFILE}`)
         console.log(`ZDOTDIR: ${process.env.ZDOTDIR}`)
         console.log(`XDG_CONFIG_HOME: ${process.env.XDG_CONFIG_HOME}`)
-        /* TODO:
-            1. On Linux/maxOS check expect is installed (/usr/bin/expect) (https://phoenixnap.com/kb/linux-expect)
-            2. On windows install Pester?
-        */
 
         shelljs.cd(projectDir)
         exec('npm install -g')
@@ -158,7 +154,7 @@ describe('Acceptance test', () => {
 
     if (platformInfo.shell === 'bash') {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
-            const result = exec(`expect ${shellExpectFile} "bash -i" "tabtwo-test something part"`)
+            const result = exec(`expect ${shellExpectFile('bash')} "tabtwo-test something part"`)
 
             expect(result.stdout).toMatch(expectedCompletion)
             expect(result.stderr).toStrictEqual('')
@@ -167,7 +163,7 @@ describe('Acceptance test', () => {
 
     if (platformInfo.shell === 'fish') {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
-            const result = exec(`expect ${shellExpectFile} "fish -i" "tabtwo-test something part"`)
+            const result = exec(`expect ${shellExpectFile('fish')} "tabtwo-test something part"`)
 
             expect(result.stdout).toMatch(expectedCompletion)
             expect(result.stderr).toStrictEqual('')
@@ -176,7 +172,7 @@ describe('Acceptance test', () => {
 
     if (platformInfo.shell === 'zsh') {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
-            const result = exec(`expect ${shellExpectFile} "zsh -i" "tabtwo-test something part"`)
+            const result = exec(`expect ${shellExpectFile('zsh')} "tabtwo-test something part"`)
 
             expect(result.stdout).toMatch(expectedCompletion)
             expect(result.stderr).toStrictEqual('')
@@ -185,7 +181,7 @@ describe('Acceptance test', () => {
 
     if (platformInfo.shell === 'ksh') {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
-            const result = exec(`expect ${shellExpectFile} "ksh" "tabtwo-test something part"`)
+            const result = exec(`expect ${shellExpectFile('ksh')} "tabtwo-test something part"`)
 
             expect(result.stdout).toMatch(expectedCompletion)
             expect(result.stderr).toStrictEqual('')

@@ -1,13 +1,12 @@
 #!/usr/bin/env expect
 
-log_user 0
+log_user 1
 
 set prompt {/@}
-set cli [lindex $argv 0]
-set command_to_test [lindex $argv 1]
+set command_to_test [lindex $argv 0]
 
 # Spawn shell and prepare for consistent output
-spawn env INPUTRC=/dev/null {*}$cli
+spawn env INPUTRC=/dev/null ksh
 send "set +o history\n"
 expect $prompt
 send "export PS1='$prompt'\n"
@@ -26,7 +25,7 @@ expect $prompt
 # Run test completion
 puts "--- BEGIN COMPLETION ---"
 
-log_user 0
+log_user 1
 send "${command_to_test}\t"
 expect {
     -timeout 3

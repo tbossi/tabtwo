@@ -75,7 +75,7 @@ jobs:
         shell: fish {0}
         run: |
           export SHELL=$(which fish)
-          mkdir -p ~/.config/fish 
+          mkdir -p ~/.config/fish
           touch ~/.config/fish/config.fish
           npm install
           npm run test
@@ -92,11 +92,15 @@ jobs:
         shell: pwsh
         run: |
           $env:SHELL = '/usr/bin/pwsh'
+          New-Item "$HOME/.config/powershell" -ItemType Directory -Force -ea 0
+          New-Item "$HOME/.config/powershell/Microsoft.PowerShell_profile.ps1"
           npm install
           npm run test
       - name: Install and test (powershell windows)
         if: ${{ matrix.shell == 'powershell' && matrix.os == 'windows-latest'}}
         shell: pwsh
         run: |
+          New-Item "$HOME\Documents\PowerShell" -ItemType Directory -Force -ea 0
+          New-Item "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
           npm install
           npm run test
