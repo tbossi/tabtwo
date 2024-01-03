@@ -6,20 +6,14 @@ set prompt {/@}
 set command_to_test [lindex $argv 0]
 
 # Spawn shell and prepare for consistent output
-spawn env INPUTRC=/dev/null zsh -i
-send "set +o history\n"
+spawn env ZDOTDIR=/dev/null zsh -i
+send "setopt no_hist_verify\n"
 expect $prompt
 send "export PS1='$prompt'\n"
 expect $prompt
-send "bind 'set show-all-if-ambiguous on'\n"
+send "autoload -U compinit\n"
 expect $prompt
-send "bind 'set bell-style none'\n"
-expect $prompt
-send "bind 'set completion-query-items -1'\n"
-expect $prompt
-send "bind 'set page-completions off'\n"
-expect $prompt
-send "bind 'set completion-display-width 0'\n"
+send "compinit\n"
 expect $prompt
 
 # Run test completion
