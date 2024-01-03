@@ -6,7 +6,7 @@ set prompt {/@}
 set command_to_test [lindex $argv 0]
 
 # Spawn shell and prepare for consistent output
-spawn env ZDOTDIR=/dev/null zsh -i
+spawn zsh -i
 send "setopt no_hist_verify\n"
 expect $prompt
 send "export PS1='$prompt'\n"
