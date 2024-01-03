@@ -43,6 +43,15 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node_version }}-npm-${{ hashFiles('package.json') }}
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
+      - name: Install bash completions
+        if: ${{ matrix.os == 'macos-latest' && matrix.shell == 'bash' }}
+        run: |
+          brew install bash-completion
+          cat <<EOF >> ~/.bash_profile
+          if [ -f $(brew --prefix)/etc/bash_completion ]; then
+            . $(brew --prefix)/etc/bash_completion
+          fi
+          EOF
       - name: Install expect
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: sudo apt-get install -y expect

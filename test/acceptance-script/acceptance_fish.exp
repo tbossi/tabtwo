@@ -7,9 +7,9 @@ set command_to_test [lindex $argv 0]
 
 # Spawn shell and prepare for consistent output
 spawn env TERM=xterm fish -i --private
-
-log_user 0
 send "function fish_prompt\n  set_color normal\n  echo -n '$prompt'\nend\n"
+expect $prompt
+send "set -U fish_greeting \"\""
 expect $prompt
 
 # Run test completion
