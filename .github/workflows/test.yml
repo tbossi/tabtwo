@@ -78,8 +78,8 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i -s
         run: |
+          zsh -i -s <<EO_SHELL
           export SHELL=$(which zsh)
           touch ~/.zshrc
           cat <<EOF >> ~/.zshrc
@@ -90,6 +90,7 @@ jobs:
           source ~/.zshrc
           npm install
           npm run test
+          EO_SHELL
       - name: Install and test (fish)
         if: ${{ matrix.shell == 'fish'}}
         shell: fish {0}
