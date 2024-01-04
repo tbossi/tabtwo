@@ -49,7 +49,9 @@ jobs:
         run: |
           brew install bash-completion@2
           cat <<EOF >> ~/.bash_profile
-          [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+          if [ -f "/usr/local/etc/profile.d/bash_completion.sh" ]; then
+           . "/usr/local/etc/profile.d/bash_completion.sh"
+          fi
           EOF
           source ~/.bash_profile
       - name: Install expect
@@ -73,7 +75,7 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i -e {0}
+        shell: zsh -i -Z -e {0}
         run: |
           export SHELL=$(which zsh)
           touch ~/.zshrc
