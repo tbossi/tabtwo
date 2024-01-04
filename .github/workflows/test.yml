@@ -48,9 +48,7 @@ jobs:
         run: |
           brew install bash-completion
           cat <<EOF >> ~/.bash_profile
-          if [ -f $(brew --prefix)/etc/bash_completion ]; then
-            . $(brew --prefix)/etc/bash_completion
-          fi
+          [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
           EOF
       - name: Install expect
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -76,7 +74,7 @@ jobs:
         shell: zsh -i {0}
         run: |
           export SHELL=$(which zsh)
-          export INTERACTIVE=true
+          export TERM=xterm
           touch ~/.zshrc
           cat <<EOF >> ~/.zshrc
           zstyle :compinstall filename '~/.zshrc'
