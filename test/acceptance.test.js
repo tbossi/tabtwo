@@ -45,7 +45,7 @@ const logRegexFishUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabt
 const logRegexPowershellInstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nInstalled!/s
 const logRegexPowershellUninstall = /Edited files:\n- "(\/.*)" \((.*)\)\n- "\/.*\/tabtwo-test_completion_for_powershell.ps1" \(.*\)\nUninstalled!/s
 
-const expectedCompletion = new RegExp([
+const expectedBashCompletion = new RegExp([
     '--- BEGIN COMPLETION ---',
     '==> RESULT:',
     'argv_0___.*\/node',
@@ -65,6 +65,30 @@ const expectedCompletion = new RegExp([
     'info7_prev___something',
     'opt1',
     'opt2',
+    '--- END COMPLETION ---',
+].join('(\r\n|\r|\n)+'), 's')
+
+const expectedZshCompletion = new RegExp([
+    '--- BEGIN COMPLETION ---',
+    '==> RESULT:',
+    'opt1 -- desc1',
+    'opt2 -- desc2',
+    'argv_0___.*\/node',
+    'argv_1___.*\/tabtwo-test',
+    'argv_2___--shell-complete',
+    'argv_3___--',
+    'argv_4___tabtwo-test',
+    'argv_5___something',
+    'argv_6___part',
+    'argv_7___',
+    'info0_complete___true',
+    'info1_words___3',
+    'info2_point___27',
+    'info3_line___tabtwo-test something part',
+    'info4_partial___tabtwo-test something part',
+    'info5_last___',
+    'info6_lastPartial___',
+    'info7_prev___part',
     '--- END COMPLETION ---',
 ].join('(\r\n|\r|\n)+'), 's')
 
@@ -156,7 +180,7 @@ describe('Acceptance test', () => {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
             const result = exec(`expect ${shellExpectFile('bash')} "tabtwo-test something part"`)
 
-            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stdout).toMatch(expectedBashCompletion)
             expect(result.stderr).toStrictEqual('')
         })
     }
@@ -165,7 +189,7 @@ describe('Acceptance test', () => {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
             const result = exec(`expect ${shellExpectFile('fish')} "tabtwo-test something part"`)
 
-            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stdout).toMatch(expectedBashCompletion)
             expect(result.stderr).toStrictEqual('')
         })
     }
@@ -174,7 +198,18 @@ describe('Acceptance test', () => {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
             const result = exec(`expect ${shellExpectFile('zsh')} "tabtwo-test something part"`)
 
-            expect(result.stdout).toMatch(expectedCompletion)
+            result.stdout = result.stdout.replace(/\b/gu, '')
+                .replace(/\u001b\[27m/gu, '')
+                .replace(/\u001b\[J/gu, '')
+                .replace(/\u001b\[10A/gu, '')
+                .replace(/\u001b\[0m/gu, '')
+                .replace(/\u001b\[24m/gu, '')
+            result.stdout = result.stdout
+                .replace(/ {3,}(?! *--)/g, '\r\n')
+                .replace(/ +/g, ' ')
+                .replace(/\r\n\r\n/g, '\r\n')
+
+            expect(result.stdout).toMatch(expectedZshCompletion)
             expect(result.stderr).toStrictEqual('')
         })
     }
@@ -183,7 +218,7 @@ describe('Acceptance test', () => {
         test(`${platformInfo.shell} completion on ${platformInfo.os}`, () => {
             const result = exec(`expect ${shellExpectFile('ksh')} "tabtwo-test something part"`)
 
-            expect(result.stdout).toMatch(expectedCompletion)
+            expect(result.stdout).toMatch(expectedBashCompletion)
             expect(result.stderr).toStrictEqual('')
         })
     }

@@ -105,7 +105,8 @@ if type compdef &>/dev/null; then
         local reply
         local si=$IFS
 
-        IFS=$'\\n' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" ${completer} -- "\${words[@]}"))
+        IFS=$'\\n'
+        reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" ${completer} -- "\${words[@]}"))
         IFS=$si
 
         _describe 'values' reply

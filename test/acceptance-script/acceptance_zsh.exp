@@ -7,24 +7,35 @@ set command_to_test [lindex $argv 0]
 
 # Spawn shell and prepare for consistent output
 spawn zsh -i
+send "source ~/.zshrc\n"
 send "setopt no_hist_verify\n"
-expect $prompt
+send "setopt no_beep\n"
+send "setopt no_auto_menu\n"
+send "setopt LIST_ROWS_FIRST\n"
+send "zstyle ':completion:*' format '\n%d'\n"
+send "zstyle ':completion:*' group-name ''\n"
+send "zstyle ':completion:*' menu select=1\n"
+send "zstyle ':completion:*' select-prompt Scrolling active: current selection at %p\n"
+send "zstyle ':completion:*' select-unambiguous true\n"
+send "zstyle ':completion:*:expand:*' tag-order all-expansions\n"
+send "zstyle ':completion:*:descriptions' format '\n%d'\n"
+send "zstyle ':completion:*:*:*:*:descriptions' format '\n%d'\n"
+send "zstyle ':completion:*:messages' format '\n%d'\n"
+send "zstyle ':menu:*' select=1\n"
+send "zstyle ':menu:*' verbose true\n"
+send "zstyle ':menu:*' separator ''\n"
 send "export PROMPT='$prompt'\n"
-expect $prompt
-send "autoload -U compinit\n"
-expect $prompt
-send "compinit -u\n"
+send "export RPROMPT=''\n"
 expect $prompt
 
 # Run test completion
 puts "--- BEGIN COMPLETION ---"
 
 log_user 0
-exp_internal 1
-send "${command_to_test}\t\t"
+send "${command_to_test} \t"
 expect {
     -timeout 3
-    -re "${command_to_test}\r\n(.*)\r\n$prompt${command_to_test}" {
+    -re "${command_to_test} \r\r\n.*values\r\n(.*)\u001b.*${command_to_test}" {
         set captured_output $expect_out(1,string)
         puts "==> RESULT:\n\n$captured_output"
     }

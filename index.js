@@ -1,4 +1,5 @@
 import * as fs from 'node:fs/promises'
+import * as os from 'node:os'
 import * as path from 'node:path'
 import { detectShell } from './detectShell.js'
 import { completions, getCompletionInfo, installBlockCheckRegex } from './shellCompletions.js'
@@ -39,6 +40,9 @@ export class TabTwo {
         const shellCompletion = completions[shell.type](this.programName, completionFilename, this.programCompleter)
         
         await fs.writeFile(completionFilename, shellCompletion.source)
+        if (os.platform !== 'win32') {
+            await fs.chmod(completionFilename, '755')
+        }
 
         const shellConfig = await fs.readFile(shell.configFile, 'utf-8')
         if (!shellConfig.includes(shellCompletion.installBlock)) {

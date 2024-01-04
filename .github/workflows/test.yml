@@ -77,6 +77,12 @@ jobs:
         run: |
           export SHELL=$(which zsh)
           touch ~/.zshrc
+          cat <<EOF >> ~/.zshrc
+          zstyle :compinstall filename '~/.zshrc'
+          autoload -Uz compinit
+          compinit
+          EOF
+          source ~/.zshrc
           npm install
           npm run test
       - name: Install and test (fish)
