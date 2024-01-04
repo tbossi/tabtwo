@@ -46,6 +46,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.node_version }}-npm
       - name: Install bash completions
         if: ${{ matrix.os == 'macos-latest' && matrix.shell == 'bash' }}
+        shell: bash -e {0}
         run: |
           brew install bash-completion@2
           cat <<EOF >> ~/.bash_profile
@@ -75,7 +76,7 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i -Z -e {0}
+        shell: zsh -i -u 0 -e {0}
         run: |
           export SHELL=$(which zsh)
           touch ~/.zshrc
