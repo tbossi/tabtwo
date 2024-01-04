@@ -88,7 +88,7 @@ jobs:
           compinit -Cu
           EOF
           npm install
-          expect -c 'spawn zsh; send "source ~/.zshrc\r"; send "npm run test\r"; expect ""'
+          expect -c 'spawn zsh; send "source ~/.zshrc\r"; send "npm run test\r"; send "exit\r"; expect eof'
       - name: Install and test (fish)
         if: ${{ matrix.shell == 'fish'}}
         shell: fish {0}
