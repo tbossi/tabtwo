@@ -31,6 +31,7 @@ jobs:
       NODEJS: ${{ matrix.node_version }}
       TEST_OS: ${{ matrix.os == 'windows-latest' && 'win32' || matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'macos-latest' && 'darwin' }}
       TEST_SHELL: ${{ matrix.shell }}
+      TERM: xterm
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -71,10 +72,9 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i -s {0}
+        shell: zsh -i {0}
         run: |
           export SHELL=$(which zsh)
-          export TERM=xterm
           touch ~/.zshrc
           cat <<EOF >> ~/.zshrc
           zstyle :compinstall filename '~/.zshrc'
