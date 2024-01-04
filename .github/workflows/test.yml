@@ -47,10 +47,11 @@ jobs:
       - name: Install bash completions
         if: ${{ matrix.os == 'macos-latest' && matrix.shell == 'bash' }}
         run: |
-          brew install bash-completion
+          brew install bash-completion@2
           cat <<EOF >> ~/.bash_profile
           [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
           EOF
+          source ~/.bash_profile
       - name: Install expect
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: sudo apt-get install -y expect
@@ -72,7 +73,7 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i {0}
+        shell: zsh -i -e {0}
         run: |
           export SHELL=$(which zsh)
           touch ~/.zshrc
