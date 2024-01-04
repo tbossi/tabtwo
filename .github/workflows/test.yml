@@ -79,7 +79,7 @@ jobs:
           cat <<EOF >> ~/.zshrc
           zstyle :compinstall filename '~/.zshrc'
           autoload -Uz compinit
-          compinit
+          compinit -Cu
           EOF
           source ~/.zshrc
           npm install
