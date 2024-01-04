@@ -71,7 +71,7 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh -i {0}
+        shell: zsh -i -s {0}
         run: |
           export SHELL=$(which zsh)
           export TERM=xterm
