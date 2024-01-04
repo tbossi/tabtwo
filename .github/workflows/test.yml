@@ -73,9 +73,10 @@ jobs:
           npm run test
       - name: Install and test (zsh)
         if: ${{ matrix.shell == 'zsh'}}
-        shell: zsh {0}
+        shell: zsh -i {0}
         run: |
           export SHELL=$(which zsh)
+          export INTERACTIVE=true
           touch ~/.zshrc
           cat <<EOF >> ~/.zshrc
           zstyle :compinstall filename '~/.zshrc'
